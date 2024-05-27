@@ -221,7 +221,7 @@ class BuiltNote implements BuiltObject {
   Rect get _bboxWithNoMargin =>
       Rect.fromLTRB(0.0, -_upperWithNoMargin, _objectWidth, _lowerWithNoMargin);
 
-  double get _noteHeadWidth => noteHeadType.width + (augmented ? 0.7 : 0.0);
+  double get _noteHeadWidth => noteHeadType.width + (augmented ? 0.6 : 0.0);
 
   double get _noteFlagWidth => _noteFlag?.width ?? 0.0;
 
