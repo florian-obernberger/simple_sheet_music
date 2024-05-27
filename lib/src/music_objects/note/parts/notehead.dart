@@ -10,8 +10,10 @@ class NoteHead with HasPosition, TextPaint implements NoteParts {
   final NoteHeadType noteHeadType;
   final int position;
   final double accidentalWidth;
+  final bool augmented;
 
-  const NoteHead(this.noteHeadType, this.position, this.accidentalWidth);
+  const NoteHead(
+      this.noteHeadType, this.position, this.accidentalWidth, this.augmented);
 
   Offset get _positionOffset => getPositionOffset(position);
 
@@ -60,5 +62,17 @@ class NoteHead with HasPosition, TextPaint implements NoteParts {
       String fontFamily) {
     textPaint(canvas, size, _glyph, renderOffset + _noteHeadOffset, color,
         fontFamily);
+
+    if (augmented) {
+      textPaint(
+          canvas,
+          size,
+          ' ',
+          renderOffset +
+              _noteHeadOffset +
+              Offset(width * 0.9, _noteHeadOffset.dy % 1 != 0.0 ? 0.0 : -0.5),
+          color,
+          fontFamily);
+    }
   }
 }

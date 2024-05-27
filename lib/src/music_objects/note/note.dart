@@ -27,6 +27,7 @@ class Note implements MusicObjectStyle {
   final Pitch pitch;
   final NoteDuration noteDuration;
   final Accidental? accidental;
+  final bool augmented;
 
   const Note({
     required this.pitch,
@@ -35,6 +36,7 @@ class Note implements MusicObjectStyle {
     this.fingering,
     this.specifiedMargin,
     this.color = Colors.black,
+    this.augmented = false,
   });
 
   @override
@@ -51,6 +53,7 @@ class Note implements MusicObjectStyle {
       noteFlagType: noteFlagType,
       accidentalType: accidental,
       fingering: fingering,
+      augmented: augmented,
     );
   }
 
@@ -61,6 +64,7 @@ class Note implements MusicObjectStyle {
           Accidental? newAccidental,
           Fingering? newFingering,
           Color? newColor,
+          bool? newAugmented,
           EdgeInsets? newSpecifiedMargin}) =>
       Note(
         pitch: newPitch ?? pitch,
@@ -69,6 +73,7 @@ class Note implements MusicObjectStyle {
         fingering: newFingering ?? fingering,
         specifiedMargin: newSpecifiedMargin ?? specifiedMargin,
         color: newColor ?? color,
+        augmented: newAugmented ?? augmented,
       );
 }
 
@@ -83,10 +88,14 @@ class BuiltNote implements BuiltObject {
   final StavePosition stavePosition;
   final Note noteStyle;
   final EdgeInsets? specifiedMargin;
+  final bool augmented;
 
   const BuiltNote(this.noteStyle, this.noteHeadType, this.stavePosition,
       this.specifiedMargin,
-      {this.noteFlagType, this.accidentalType, this.fingering});
+      {this.noteFlagType,
+      this.accidentalType,
+      this.fingering,
+      this.augmented = false});
 
   FingeringRenderer? get _fingeringOnMeasure => fingering != null
       ? FingeringRenderer(fingering!,
@@ -113,8 +122,8 @@ class BuiltNote implements BuiltObject {
 
   bool get _hasStem => noteHeadType.hasStem;
 
-  NoteHead get _noteHead => NoteHead(
-      noteHeadType, _localPosition, _accidentalWidth + _accidentalSpacing);
+  NoteHead get _noteHead => NoteHead(noteHeadType, _localPosition,
+      _accidentalWidth + _accidentalSpacing, augmented);
 
   NoteStem? get _noteStem => _hasStem
       ? NoteStem(
@@ -212,7 +221,7 @@ class BuiltNote implements BuiltObject {
   Rect get _bboxWithNoMargin =>
       Rect.fromLTRB(0.0, -_upperWithNoMargin, _objectWidth, _lowerWithNoMargin);
 
-  double get _noteHeadWidth => noteHeadType.width;
+  double get _noteHeadWidth => noteHeadType.width + (augmented ? 0.7 : 0.0);
 
   double get _noteFlagWidth => _noteFlag?.width ?? 0.0;
 
@@ -262,7 +271,7 @@ class NoteRenderer implements ObjectOnCanvas {
       _upperLedgerLineMinPosition <= position;
 
   @override
-  void render(Canvas canvas, Size size, fontFamily) {
+  void render(Canvas canvas, Size size, String fontFamily) {
     accidental?.render(
         canvas, size, helper.renderOffset, musicObjectStyle.color, fontFamily);
     noteHead.render(
