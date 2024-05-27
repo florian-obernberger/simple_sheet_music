@@ -22,3 +22,5 @@ export 'src/music_objects/rest/rest.dart' show Rest;
 export 'src/music_objects/rest/rest_type.dart';
 export 'src/music_objects/key_signature/key_signature.dart'
     show KeySignature, KeySignatureType;
+export 'src/music_objects/time_signature/time_signature.dart'
+    show TimeSignature, TimeSignatureType;
