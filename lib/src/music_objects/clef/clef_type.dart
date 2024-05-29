@@ -76,23 +76,22 @@ enum ClefType {
   final List<int> sharpKeySignaturePositions;
   final List<int> flatKeySignaturePositions;
 
-  int get positionOnCenter {
-    switch (this) {
-      case treble ||
-            treble8va ||
-            treble8vb ||
-            treble8vbParens ||
-            treble15ma ||
-            treble15mb:
-        return Pitch.b4.position;
-      case alto || alto8vb:
-        return Pitch.c4.position;
-      case tenor || tenor8vb:
-        return Pitch.a3.position;
-      case bass || bass8va || bass8vb || bass15ma || bass15mb:
-        return Pitch.d3.position;
-    }
-  }
+  int get positionOnCenter => switch (this) {
+        treble => Pitch.b4.position,
+        treble8va => Pitch.b5.position,
+        treble15ma => Pitch.b6.position,
+        treble8vb || treble8vbParens => Pitch.b3.position,
+        treble15mb => Pitch.b2.position,
+        alto => Pitch.c4.position,
+        alto8vb => Pitch.c3.position,
+        tenor => Pitch.c4.position,
+        tenor8vb => Pitch.c3.position,
+        bass => Pitch.d3.position,
+        bass8va => Pitch.d4.position,
+        bass15ma => Pitch.d5.position,
+        bass8vb => Pitch.d2.position,
+        bass15mb => Pitch.d1.position,
+      };
 
   double get width => glyphBbox.width;
   double get offsetX => -glyphBbox.left;
